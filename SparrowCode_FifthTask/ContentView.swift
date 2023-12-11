@@ -7,17 +7,15 @@
 
 import SwiftUI
 
+var colors: [Color] = [Color.white, Color.pink, Color.yellow, Color.black]
+
 struct ContentView: View {
     var body: some View {
         VStack(spacing: 0) {
-            Rectangle()
-                .foregroundStyle(Color.white)
-            Rectangle()
-                .foregroundStyle(Color.pink)
-            Rectangle()
-                .foregroundStyle(Color.yellow)
-            Rectangle()
-                .foregroundStyle(Color.black)
+            ForEach(colors, id: \.self) { color in
+                Rectangle()
+                    .foregroundStyle(color)
+            }
         }
         .ignoresSafeArea()
     }
