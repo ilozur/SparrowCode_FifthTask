@@ -7,31 +7,42 @@
 
 import SwiftUI
 
-var colors: [Color] = [Color.white, Color.pink, Color.yellow, Color.black]
+var colors: [Color] = [.white, .pink, .yellow, .black]
+var monoColors: [Color] = [.white, .black, .white, .black]
 
 struct ContentView: View {
     @State var rectanglePosition: CGSize = .zero
-    
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                ForEach(colors, id: \.self) { color in
+                ForEach(monoColors, id: \.self) { color in
                     Rectangle()
                         .foregroundStyle(color)
                 }
             }
-            .ignoresSafeArea()
             
-            RoundedRectangle(cornerRadius: 25)
-                .foregroundStyle(Color.green)
-                .frame(width: 125, height: 125)
-                .offset(rectanglePosition)
-                .gesture(DragGesture()
-                    .onChanged({ gesture in
-                        rectanglePosition = gesture.translation
-                    })
-                )
+            ZStack {
+                VStack(spacing: 0) {
+                    ForEach(colors, id: \.self) { monoColor in
+                        Rectangle()
+                            .foregroundStyle(monoColor)
+                    }
+                }
+                
+                RoundedRectangle(cornerRadius: 25)
+                    .frame(width: 125, height: 125)
+                    .offset(rectanglePosition)
+                    .gesture(DragGesture()
+                        .onChanged { gesture in
+                            rectanglePosition = gesture.translation
+                        }
+                    )
+                    .blendMode(.destinationOut)
+            }
+            .compositingGroup()
         }
+        .ignoresSafeArea()
     }
 }
 
