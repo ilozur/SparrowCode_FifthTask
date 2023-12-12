@@ -8,10 +8,11 @@
 import SwiftUI
 
 var colors: [Color] = [.white, .pink, .yellow, .black]
-var monoColors: [Color] = [.white, .black, .white, .black]
+var monoColors: [Color] = [.black, .white, .black, .white]
 
 struct ContentView: View {
-    @State var rectanglePosition: CGSize = .zero
+    // TODO: UIScreen.main is deprecated, I need to work with it.
+    @State private var rectangleLocation: CGPoint = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
 
     var body: some View {
         ZStack {
@@ -30,12 +31,10 @@ struct ContentView: View {
                     }
                 }
                 
-                RoundedRectangle(cornerRadius: 25)
-                    .frame(width: 125, height: 125)
-                    .offset(rectanglePosition)
+                universalRectangle
                     .gesture(DragGesture()
                         .onChanged { gesture in
-                            rectanglePosition = gesture.translation
+                            rectangleLocation = gesture.location
                         }
                     )
                     .blendMode(.destinationOut)
@@ -43,6 +42,12 @@ struct ContentView: View {
             .compositingGroup()
         }
         .ignoresSafeArea()
+    }
+    
+    var universalRectangle: some View {
+        RoundedRectangle(cornerRadius: 25)
+            .frame(width: 125, height: 125)
+            .position(rectangleLocation)
     }
 }
 
